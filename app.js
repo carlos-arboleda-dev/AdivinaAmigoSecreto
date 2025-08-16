@@ -38,50 +38,55 @@ function actualizarListaAmigos() {
 // Función para sortear un amigo secreto
 function sortearAmigo() {
     const resultado = document.getElementById('resultado');
-    resultado.innerHTML = ''; // Limpiar resultado anterior
+    resultado.innerHTML = '<li class="result-item">Sorteando...</li>'; // Mensaje inicial
     
-    // Validar que hay amigos en la lista
-    if (amigos.length === 0) {
-        const mensaje = document.createElement('li');
-        mensaje.textContent = 'No hay amigos en la lista para sortear.';
-        mensaje.className = 'result-item error';
-        resultado.appendChild(mensaje);
-        return;
-    }
-    
-    // Validar si solo hay un amigo
-    if (amigos.length === 1) {
-        const mensaje = document.createElement('li');
-        mensaje.textContent = `Solo hay un amigo en la lista: ${amigos[0]}`;
-        mensaje.className = 'result-item';
-        resultado.appendChild(mensaje);
-        return;
-    }
-    
-    // Generar índice aleatorio
-    const indiceAleatorio = Math.floor(Math.random() * amigos.length);
-    const amigoSecreto = amigos[indiceAleatorio];
-    
-    // Mostrar el resultado
-    const resultadoItem = document.createElement('li');
-    resultadoItem.innerHTML = `🎉 ¡El amigo secreto es: <strong>${amigoSecreto}</strong>! 🎉`;
-    resultadoItem.className = 'result-item highlight';
-    resultado.appendChild(resultadoItem);
-    
-    // Opcional: reproducir efecto de sorteo
-    efectoSorteo();
+    // Validaciones y sorteo con retardo para efecto visual
+    setTimeout(() => {
+        resultado.innerHTML = ''; // Limpiar mensaje "Sorteando..."
+        
+        if (amigos.length === 0) {
+            const mensaje = document.createElement('li');
+            mensaje.textContent = 'No hay amigos en la lista para sortear.';
+            mensaje.className = 'result-item error';
+            resultado.appendChild(mensaje);
+            return;
+        }
+        
+        if (amigos.length === 1) {
+            const mensaje = document.createElement('li');
+            mensaje.textContent = `Solo hay un amigo en la lista: ${amigos[0]}`;
+            mensaje.className = 'result-item';
+            resultado.appendChild(mensaje);
+            return;
+        }
+        
+        // Generar índice aleatorio
+        const indiceAleatorio = Math.floor(Math.random() * amigos.length);
+        const amigoSecreto = amigos[indiceAleatorio];
+        
+        // Mostrar resultado con animación
+        const resultadoItem = document.createElement('li');
+        resultadoItem.innerHTML = `🎉 ¡El amigo secreto es: <strong>${amigoSecreto}</strong>! 🎉`;
+        resultadoItem.className = 'result-item highlight';
+        
+        // Añadir clase de animación
+        resultadoItem.style.opacity = '0';
+        resultado.appendChild(resultadoItem);
+        
+        // Animación fade-in
+        let opacity = 0;
+        const fadeIn = setInterval(() => {
+            opacity += 0.1;
+            resultadoItem.style.opacity = opacity;
+            if (opacity >= 1) clearInterval(fadeIn);
+        }, 50);
+        
+    }, 1000); // Retardo de 1 segundo para el efecto de sorteo
 }
 
-// Función opcional para efecto visual durante el sorteo
-function efectoSorteo() {
-    const resultado = document.getElementById('resultado');
-    resultado.innerHTML = '<li class="result-item">Sorteando...</li>';
-    
-    // Pequeña animación antes de mostrar el resultado
-    setTimeout(() => {
-        // El resultado real se muestra en la función sortearAmigo
-    }, 1000);
-}
+// Elimina la función efectoSorteo() ya que ahora está integrada
+
+
 
 // Event listener para tecla Enter en el input
 document.addEventListener('DOMContentLoaded', function() {
